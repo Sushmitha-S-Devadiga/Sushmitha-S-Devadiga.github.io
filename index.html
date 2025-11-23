@@ -620,7 +620,52 @@
             transform: translateY(-3px);
             box-shadow: 0 7px 15px rgba(0,0,0,0.15);
         }
-        
+        /* Modal Preview */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .preview-content {
+            width: 90%;
+            max-width: 900px;
+            background: #000;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+
+        #previewFrame {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 3000;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ff4d4d;
+        }
         /* Footer */
         footer {
             background: linear-gradient(135deg, var(--primary) 0%, #1a2530 100%);
@@ -699,63 +744,9 @@
                 font-size: 1.2rem;
             }
         }
-        /* Preview Modal */
-.preview-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(3px);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.preview-content {
-    width: 90%;
-    max-width: 900px;
-    background: #000;
-    border-radius: 10px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 40px rgba(0,0,0,0.5);
-}
-
-#previewFrame {
-    width: 100%;
-    height: 500px;
-    border: none;
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 3000;
-    transition: 0.3s;
-}
-
-.close-btn:hover {
-    color: #ff4d4d;
-}
-
+        
     </style>
 </head>
-    <!-- Preview Modal -->
-<div id="previewModal" class="preview-modal">
-    <div class="preview-content">
-        <span class="close-btn" id="closePreview">&times;</span>
-        <iframe id="previewFrame" src="" allow="autoplay" allowfullscreen></iframe>
-    </div>
-</div>
-
 <body>
 
     <!-- Header Section -->
@@ -855,30 +846,31 @@
 
                 <div class="project-card">
                     <div class="project-info">
-                        <h3>Waste Management System using ESP32</h3>
-                        <div class="project-tech">
-                            <span class="tech-tag">ESP32</span>
-                            <span class="tech-tag">IoT</span>
-                            <span class="tech-tag">Sensors</span>
-                        </div>
-                        <p>Designed a sorting system using ESP32 and multiple sensors for dry, wet, and metallic waste.</p>
-                        <a href="#" class="button">View Details</a>
-                    </div>
-                </div>
+                        <h3>Wireless Speed Limit Notification Using GPS Technology</h3>
 
-                <div class="project-card">
-                    <div class="project-info">
-                        <h3>Smart Speed Alert System</h3>
                         <div class="project-tech">
                             <span class="tech-tag">RFID</span>
                             <span class="tech-tag">GPS</span>
                             <span class="tech-tag">GSM</span>
                         </div>
-                        <p>Monitors speeding violations and sends alerts to authorities via GSM module.</p>
-                        <a href="#" class="button">View Details</a>
+
+                        <p>Developed a vehicle speed monitoring system using GPS to detect speed limits in predefined zones, with OLED alerts and GSM notifications to authorities on violations.</p>
+
+                        <div class="project-actions">
+                            <a href="#" class="button" 
+                               data-preview-type="video" 
+                               data-preview-src="https://drive.google.com/file/d/1jVWsCkn0tG4hbXuTiBnK-XXQ-mtY7epJ/preview">
+                               Watch Video
+                            </a>
+
+                            <a href="#" class="button" 
+                               data-preview-type="pdf" 
+                               data-preview-src="https://drive.google.com/file/d/1FKTEtf5RjkfRSctibWTYKnydEIjgAgFU/preview">
+                               View Report
+                            </a>
+                        </div>
                     </div>
                 </div>
-
                 <div class="project-card">
                     <div class="project-info">
                         <h3>Solar Power Generation for Home</h3>
@@ -1034,8 +1026,14 @@
         </div>
         <p>&copy; 2024 Sushmitha S Devadiga. All rights reserved.</p>
     </footer>
-
-    <script>
+ <!-- Preview Modal -->
+    <div id="previewModal" class="preview-modal">
+        <div class="preview-content">
+            <span class="close-btn" id="closePreview">&times;</span>
+            <iframe id="previewFrame" src="" allow="autoplay" allowfullscreen></iframe>
+        </div>
+    </div>
+     <script>
         /* Smooth scroll */
         document.querySelectorAll('nav a').forEach(a => {
             a.addEventListener('click', e => {
@@ -1044,37 +1042,34 @@
                 window.scrollTo({ top: section.offsetTop - 80, behavior: "smooth" });
             });
         });
+
+        /* Modal Preview System */
+        const modal = document.getElementById("previewModal");
+        const previewFrame = document.getElementById("previewFrame");
+        const closePreview = document.getElementById("closePreview");
+
+        document.querySelectorAll("[data-preview-type]").forEach(btn => {
+            btn.addEventListener("click", function(e) {
+                e.preventDefault();
+                const src = this.getAttribute("data-preview-src");
+
+                previewFrame.src = src;
+                modal.style.display = "flex";
+            });
+        });
+
+        closePreview.onclick = function() {
+            modal.style.display = "none";
+            previewFrame.src = "";
+        };
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+                previewFrame.src = "";
+            }
+        };
     </script>
-<script>
-// Video/PDF Modal Preview
-const modal = document.getElementById("previewModal");
-const previewFrame = document.getElementById("previewFrame");
-const closePreview = document.getElementById("closePreview");
-
-// For all preview buttons
-document.querySelectorAll("[data-preview-type]").forEach(btn => {
-    btn.addEventListener("click", function(e) {
-        e.preventDefault();
-        const src = this.getAttribute("data-preview-src");
-
-        previewFrame.src = src;
-        modal.style.display = "flex";
-    });
-});
-
-// Close modal
-closePreview.onclick = function() {
-    modal.style.display = "none";
-    previewFrame.src = ""; // stop video
-};
-
-window.onclick = function(event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-        previewFrame.src = "";
-    }
-};
-</script>
 
 </body>
 </html>
